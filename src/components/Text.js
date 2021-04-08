@@ -8,6 +8,7 @@ function Text({ text, boxHeight, boxWidth }) {
   const [size, setSize] = useState(1);
   const [xshift, setXshift] = useState(0);
   const [yshift, setYshift] = useState(0);
+  const [fontstatus, setFontstatus] = useState(false)
 
   useEffect(() => {
     const vec = new THREE.Vector3();
@@ -18,6 +19,8 @@ function Text({ text, boxHeight, boxWidth }) {
 
     if (vecsize.x > boxWidth - 0.1) {
       setSize(size - 0.05);
+    } else {
+      setFontstatus(true)
     }
   }, [size]);
 
@@ -34,7 +37,7 @@ function Text({ text, boxHeight, boxWidth }) {
       position={[-xshift / 2, boxHeight / 2, yshift / 2]}
     >
       <textGeometry attach="geometry" args={[text, textOptions]} />
-      <meshStandardMaterial attach="material" />
+      <meshStandardMaterial attach="material" color="white" />
     </mesh>
   );
 }

@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useRef, useEffect} from "react";
 
 function Box({ dims, color }) {
+
   return (
     <mesh position={[0, 0, 0]}>
       <boxBufferGeometry args={dims} />

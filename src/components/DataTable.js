@@ -4,13 +4,12 @@ import { Table, Image, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 function DataTable(props) {
-    console.log(props)
+
 
     const [data, setData] = useState([])
 
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/api/analyzers/').then(response => {
-            console.log(response.data)
             setData(response.data)
         })
     }, [])
@@ -30,8 +29,8 @@ function DataTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {data.map(item => (
-                    <tr>
+                {data.map((item,i) => (
+                    <tr key={i}>
                         <td className="text-center"><Image height={30} src={item.brand_logo} rounded /></td>
                         <td>{item.brand}</td>
                         <td>{item.name}</td>

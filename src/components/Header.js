@@ -1,24 +1,29 @@
-import React from 'react'
-import { Nav, Navbar, Container } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap'
+import React from "react";
+import { Nav, Navbar, Container } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-dom";
 
 function Header() {
-    return (
-        <Navbar bg="light" expand="lg">
-            <Container>
+  return (
+    <Navbar bg="light" expand="lg">
+      <Container>
         <LinkContainer to="/">
-        <Navbar.Brand>React-Bootstrap</Navbar.Brand>
+          <Navbar.Brand>Analyzer Models</Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
-            </Nav>
+          <Nav className="mr-auto">
+            <LinkContainer to="/">
+              <Nav.Link>Datatable</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/add">
+              <Nav.Link>Add Analyzer</Nav.Link>
+            </LinkContainer>
+          </Nav>
         </Navbar.Collapse>
-        </Container>
-        </Navbar>
-    )
+      </Container>
+    </Navbar>
+  );
 }
 
-export default Header
+export default Header;

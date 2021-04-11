@@ -2,13 +2,13 @@ import React, { Suspense, useRef, useEffect, useState } from "react";
 import JSONfont from "../Roboto_Regular.json";
 import * as THREE from "three";
 
-function Text({ text, boxHeight, boxWidth }) {
+function Text({ text, boxHeight, boxWidth, color }) {
   const font = new THREE.FontLoader().parse(JSONfont);
   const textmesh = useRef();
   const [size, setSize] = useState(1);
   const [xshift, setXshift] = useState(0);
   const [yshift, setYshift] = useState(0);
-  const [fontstatus, setFontstatus] = useState(false)
+  const [fontstatus, setFontstatus] = useState(false);
 
   useEffect(() => {
     const vec = new THREE.Vector3();
@@ -17,11 +17,8 @@ function Text({ text, boxHeight, boxWidth }) {
     setXshift(vecsize.x);
     setYshift(vecsize.y);
 
-    if (vecsize.x > boxWidth - 0.1) {
-      setSize(size - 0.05);
-    } else {
-      setFontstatus(true)
-    }
+    setSize((boxWidth * (9 / 10) * size) / vecsize.x);
+    setFontstatus(true);
   }, [size]);
 
   const textOptions = {
@@ -37,7 +34,12 @@ function Text({ text, boxHeight, boxWidth }) {
       position={[-xshift / 2, boxHeight / 2, yshift / 2]}
     >
       <textGeometry attach="geometry" args={[text, textOptions]} />
-      <meshStandardMaterial attach="material" color="white" />
+      <meshPhongMaterial
+        transparent={true}
+        opacity={fontstatus ? 1 : 0}
+        attach="material"
+        color={`rgb(${color.r},${color.g},${color.b})`}
+      />
     </mesh>
   );
 }

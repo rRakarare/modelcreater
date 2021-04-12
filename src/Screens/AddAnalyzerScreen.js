@@ -19,6 +19,8 @@ function AddAnalyzerScreen() {
   const [height, setHeight] = useState(0);
   const [depth, setDepth] = useState(0);
 
+  const [unit, setUnit] =useState('cm')
+
   const getData = async (keyword) => {
     const response = await logoClearbit.get("suggest?", {
       params: {
@@ -60,13 +62,7 @@ function AddAnalyzerScreen() {
     <Container>
       <Form className="mt-2">
         <Form.Row>
-          <Col xs={2}>
-            <Form.Control
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Analyzer name"
-            />
-          </Col>
-          <Col xs={2}>
+        <Col xs={2}>
             <Form.Control
               onChange={(e) => setCompany(e.target.value)}
               placeholder="Company"
@@ -74,11 +70,20 @@ function AddAnalyzerScreen() {
           </Col>
           <Col xs={2}>
             <Form.Control
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Analyzer name"
+            />
+          </Col>
+
+          <Col xs={2}>
+            <Form.Control
               onChange={(e) => setCode(e.target.value)}
               placeholder="Code"
             />
           </Col>
-          <Col xs={2}>
+          </Form.Row>
+          <Form.Row className="mt-2">
+          <Col xs={5}>
             <Autocomplete
               size="small"
               id="combo-box-demo"
@@ -122,25 +127,33 @@ function AddAnalyzerScreen() {
           </Col>
         </Form.Row>
         <Form.Row className="mt-2">
-          <Col>
+          <Col xs={6}>
+          <Form.Control onChange={(e)=>setUnit(e.target.value)} as="select">
+            <option>cm</option>
+            <option>in</option>
+          </Form.Control>
+          </Col>
+        </Form.Row>
+        <Form.Row className="mt-2">
+          <Col xs={2}>
             <Form.Control
-              onChange={(e) => setWidth(e.target.value / 100)}
+              onChange={(e) => setWidth(unit == "cm" ? e.target.value / 100: e.target.value *2.54 / 100)}
               type="number"
-              placeholder="width [cm]"
+              placeholder={`width [${unit}]`}
             />
           </Col>
-          <Col>
+          <Col xs={2}>
             <Form.Control
-              onChange={(e) => setDepth(e.target.value / 100)}
+              onChange={(e) => setDepth(unit == "cm" ? e.target.value / 100: e.target.value *2.54 / 100)}
               type="number"
-              placeholder="depth [cm]"
+              placeholder={`depth [${unit}]`}
             />
           </Col>
-          <Col>
+          <Col xs={2}>
             <Form.Control
-              onChange={(e) => setHeight(e.target.value / 100)}
+              onChange={(e) => setHeight(unit == "cm" ? e.target.value / 100: e.target.value *2.54 / 100)}
               type="number"
-              placeholder="height [cm]"
+              placeholder={`height [${unit}]`}
             />
           </Col>
         </Form.Row>

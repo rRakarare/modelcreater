@@ -82,19 +82,20 @@ function NewTable() {
           <Link to={`/build/${params.value}`}>
             <Button size="sm">Build Model</Button>
           </Link>
-          <Link to={`/build/${params.value}`}>
-            <Button className="ml-2" size="sm" variant="danger">
+
+            <Button onClick={()=>deleteModel(params.value)} className="ml-2" size="sm" variant="danger">
               Delete
             </Button>
-          </Link>
+
         </>
       ),
     },
   ];
 
   return (
-    <div className="mt-3" style={{ height: 650, width: "100%" }}>
+    <div className="mt-3" style={{ height: "100%", width: "100%" }}>
       <DataGrid
+      autoHeight={true}
         components={{
           Toolbar: CustomToolbar,
         }}

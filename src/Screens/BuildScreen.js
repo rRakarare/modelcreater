@@ -1,4 +1,4 @@
-import React, { useRef, useState, Suspense, useEffect } from "react";
+import React, { useRef, useState, Suspense, useEffect, useReducer } from "react";
 import {
   Container,
   Row,
@@ -7,10 +7,12 @@ import {
   ListGroup,
   Button,
   Image,
+  Form
 } from "react-bootstrap";
 import { Canvas, extend, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { SketchPicker } from "react-color";
+import { useHistory } from "react-router-dom";
 
 import axios from "axios";
 
@@ -20,7 +22,10 @@ import { exportdata } from "../helpers/exportmodel";
 
 extend({ OrbitControls });
 
+
+
 function BuildScreen({ match }) {
+
   const analyzerID = match.params.id;
   const [data, setData] = useState(null);
   const [colorOpen, setColorOpen] = useState(false);
@@ -32,6 +37,13 @@ function BuildScreen({ match }) {
     g: "255",
     b: "255",
   });
+
+  const [unit, setUnit] =useState('cm')
+  const [modelheight, setHeigth] = useState(0)
+  const [modelwidth, setWidth] = useState(0)
+  const [modeldepth, setDepth] = useState(0)
+
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   const model = useRef();
 
@@ -58,13 +70,37 @@ function BuildScreen({ match }) {
     setTextColoritem(color.rgb);
   };
 
+  const updateModel = async () => {
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/analyzers/${analyzerID}/`,
+        {
+          brand: data.brand,
+          brand_logo: data.brand_logo,
+          code: data.code,
+          name: data.name,
+          width: unit == 'cm' ? modelwidth/100 : modelwidth*2.54/100,
+          height: unit == 'cm' ? modelheight/100 : modelheight*2.54/100,
+          depth: unit == 'cm' ? modeldepth/100 : modeldepth*2.54/100,
+        }
+      );
+      forceUpdate()
+    } catch (err) {
+      console.log(err.response.data);
+      return err.response;
+    }
+  }
+
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/analyzers/${analyzerID}`)
+      .get(`http://127.0.0.1:8000/api/analyzers/${analyzerID}/`)
       .then((response) => {
         setData(response.data);
+        setHeigth(unit == 'cm' ? (response.data.height*100).toFixed(2): (response.data.height*100/2.54).toFixed(2))
+        setWidth(unit == 'cm' ? (response.data.width*100).toFixed(2): (response.data.width*100/2.54).toFixed(2))
+        setDepth(unit == 'cm' ? (response.data.depth*100).toFixed(2): (response.data.depth*100/2.54).toFixed(2))
       });
-  }, []);
+  }, [unit, ignored]);
 
   const Scene = () => {
     // useFrame(() => {
@@ -82,6 +118,7 @@ function BuildScreen({ match }) {
             text={data.code}
             boxHeight={data.height}
             boxWidth={data.width}
+            boxDepth={data.depth}
             color={textcoloritem}
           />
         </Suspense>
@@ -114,20 +151,27 @@ function BuildScreen({ match }) {
                 <Image height={25} src={data.brand_logo} /> {data.name}
               </Card.Header>
               <ListGroup variant="flush">
-                <ListGroup.Item>
-                  <h5 className="d-inline">Breite: </h5>{" "}
-                  {(data.width * 100).toFixed(2)}cm
+              <ListGroup.Item>
+              <Form.Control onChange={(e)=>setUnit(e.target.value)} as="select">
+            <option>cm</option>
+            <option>in</option>
+          </Form.Control>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <h5 className="d-inline">Höhe: </h5>{" "}
-                  {(data.height * 100).toFixed(2)}cm
+                  <h5 className="d-inline">Breite [{unit}]</h5>{" "}
+                  <Form.Control onChange={(e)=>setWidth(e.target.value)} type="number" placeholder="Enter width" value={modelwidth}/>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <h5 className="d-inline">Tiefe: </h5>{" "}
-                  {(data.depth * 100).toFixed(2)}cm
+                  <h5 className="d-inline">Tiefe [{unit}]</h5>{" "}
+                  <Form.Control onChange={(e)=>setDepth(e.target.value)} type="number" placeholder="Enter depth" value={modeldepth}/>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h5 className="d-inline">Höhe [{unit}]</h5>{" "}
+                  <Form.Control onChange={(e)=>setHeigth(e.target.value)} type="number" placeholder="Enter height" value={modelheight}/>
                 </ListGroup.Item>
 
-                <ListGroup.Item>
+
+                <ListGroup.Item className="text-center">
                   <Button
                     className="mr-2"
                     size="sm"
@@ -194,6 +238,13 @@ function BuildScreen({ match }) {
                       />
                     </div>
                   ) : null}
+                  <Button
+                    size="sm"
+                    className="mr-2"
+                    onClick={() => updateModel()}
+                  >
+                    Update
+                  </Button>
                   <Button
                     size="sm"
                     onClick={() => exportdata(model, `${data.name}.gltf`)}

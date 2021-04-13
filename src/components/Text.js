@@ -2,7 +2,7 @@ import React, { Suspense, useRef, useEffect, useState } from "react";
 import JSONfont from "../Roboto_Regular.json";
 import * as THREE from "three";
 
-function Text({ text, boxHeight, boxWidth, color }) {
+function Text({ text, boxHeight, boxWidth, boxDepth, color }) {
   const font = new THREE.FontLoader().parse(JSONfont);
   const textmesh = useRef();
   const [size, setSize] = useState(1);
@@ -10,14 +10,22 @@ function Text({ text, boxHeight, boxWidth, color }) {
   const [yshift, setYshift] = useState(0);
   const [fontstatus, setFontstatus] = useState(false);
 
+
   useEffect(() => {
     const vec = new THREE.Vector3();
     textmesh.current.geometry.computeBoundingBox();
     const vecsize = textmesh.current.geometry.boundingBox.getSize(vec);
     setXshift(vecsize.x);
-    setYshift(vecsize.y);
+    setYshift(vecsize.y/2);
 
-    setSize((boxWidth * (9 / 10) * size) / vecsize.x);
+    if (vecsize.x/vecsize.y > boxWidth/boxHeight) {
+      setSize((boxWidth * (9 / 10) * size) / vecsize.x);
+    } else {
+      setSize((boxDepth * (8 / 10) * size) / vecsize.y);
+    }
+
+    
+    
     setFontstatus(true);
   }, [size]);
 

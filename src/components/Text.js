@@ -18,7 +18,8 @@ function Text({ text, boxHeight, boxWidth, boxDepth, color }) {
     setXshift(vecsize.x);
     setYshift(vecsize.y/2);
 
-    if (vecsize.x/vecsize.y > boxWidth/boxHeight) {
+
+    if (vecsize.x/vecsize.y > boxWidth/boxDepth) {
       setSize((boxWidth * (9 / 10) * size) / vecsize.x);
     } else {
       setSize((boxDepth * (8 / 10) * size) / vecsize.y);

@@ -9,15 +9,19 @@ function Text({ text, boxHeight, boxWidth, boxDepth, color }) {
   const [xshift, setXshift] = useState(0);
   const [yshift, setYshift] = useState(0);
   const [fontstatus, setFontstatus] = useState(false);
+  const [run, setRun] = useState(0)
 
 
-  useEffect(() => {
+  const getVecSize = () => {
     const vec = new THREE.Vector3();
     textmesh.current.geometry.computeBoundingBox();
     const vecsize = textmesh.current.geometry.boundingBox.getSize(vec);
-    setXshift(vecsize.x);
-    setYshift(vecsize.y/2);
+    return vecsize
+  }
 
+
+  const setTextSize = async () => {
+    const vecsize = await getVecSize()
 
     if (vecsize.x/vecsize.y > boxWidth/boxDepth) {
       setSize((boxWidth * (9 / 10) * size) / vecsize.x);
@@ -25,10 +29,22 @@ function Text({ text, boxHeight, boxWidth, boxDepth, color }) {
       setSize((boxDepth * (8 / 10) * size) / vecsize.y);
     }
 
+    const newvecsize = await getVecSize()
+    setXshift(newvecsize.x);
+    setYshift(newvecsize.y);
+
+    if (run < 1) {
+      setRun(run+1)
+    } else {
+      setFontstatus(true);
+    }
+
+  }
+
+  useEffect(() => {
+    setTextSize()   
     
-    
-    setFontstatus(true);
-  }, [size]);
+  }, [run]);
 
   const textOptions = {
     font,

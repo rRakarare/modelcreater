@@ -10,7 +10,7 @@ import {
   Form
 } from "react-bootstrap";
 import { Canvas, extend, useFrame } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, ContactShadows } from "@react-three/drei";
 import { SketchPicker } from "react-color";
 import { useHistory } from "react-router-dom";
 
@@ -29,7 +29,7 @@ function BuildScreen({ match }) {
   const analyzerID = match.params.id;
   const [data, setData] = useState(null);
   const [colorOpen, setColorOpen] = useState(false);
-  const [coloritem, setColoritem] = useState({ r: "0", g: "0", b: "0" });
+  const [coloritem, setColoritem] = useState({ r: "120", g: "120", b: "120" });
 
   const [textcolorOpen, setTextColorOpen] = useState(false);
   const [textcoloritem, setTextColoritem] = useState({
@@ -103,16 +103,19 @@ function BuildScreen({ match }) {
   }, [unit, ignored]);
 
   const Scene = () => {
-    // useFrame(() => {
-    //   model.current.rotation.y += 0.01;
-    // });
 
     return (
-      <group ref={model}>
+      
+      <group position={[0,0.1,0]} ref={model}>
+        <Suspense fallback={null}>
         <Box
           dims={[data.width, data.height, data.depth]}
           color={`rgb(${coloritem.r},${coloritem.g},${coloritem.b})`}
+          img={data.brand_logo}
+        
+          
         />
+        </Suspense>
         <Suspense fallback={null}>
           <Text
             text={data.code}
@@ -139,7 +142,13 @@ function BuildScreen({ match }) {
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, -10]} />
                 <Scene />
-                <OrbitControls />
+                <OrbitControls autoRotate={false} />
+                <ContactShadows opacity={1}
+  width={1}
+  height={1}
+  blur={1} 
+  far={10} 
+  resolution={256}  />
               </Canvas>
             ) : null}
           </div>

@@ -52,7 +52,6 @@ function AddAnalyzerScreen() {
   };
 
   useEffect(() => {
-    console.log(brand);
     if (term) {
       getData(term);
     }
@@ -82,7 +81,7 @@ function AddAnalyzerScreen() {
             />
           </Col>
           </Form.Row>
-          <Form.Row className="mt-2">
+          <Form.Row className="mt-2 ">
           <Col xs={5}>
             <Autocomplete
               size="small"
@@ -123,7 +122,7 @@ function AddAnalyzerScreen() {
             />
           </Col>
           <Col>
-            <Image height={40} src={brand.logo}></Image>
+            <Image height={40} src={brand ? brand.logo : "logo.png"}></Image>
           </Col>
         </Form.Row>
         <Form.Row className="mt-2">

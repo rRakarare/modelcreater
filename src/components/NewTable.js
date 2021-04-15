@@ -7,6 +7,7 @@ import {
 import { Button, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import _ from 'lodash'
 
 function CustomToolbar() {
   return (
@@ -22,7 +23,6 @@ function NewTable() {
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/api/analyzers/").then((response) => {
       setData(response.data);
-      console.log(response.data);
     });
   }, []);
 
@@ -40,7 +40,7 @@ function NewTable() {
       field: "brand_logo",
       headerName: "Logo",
       width: 100,
-      renderCell: (params) => <Image height={70} src={params.value} />,
+      renderCell: (params) => <Image fluid src={params.value} />,
     },
     {
       field: "brand",
@@ -95,6 +95,11 @@ function NewTable() {
   return (
     <div className="mt-3" style={{ height: "100%", width: "100%" }}>
       <DataGrid
+      sortModel={[
+        {
+          field: 'brand',
+          sort: 'asc',}
+      ]}
       autoHeight={true}
         components={{
           Toolbar: CustomToolbar,

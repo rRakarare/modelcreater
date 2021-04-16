@@ -29,9 +29,8 @@ function Text({ text, boxHeight, boxWidth, boxDepth, color }) {
       setSize((boxDepth * (8 / 10) * size) / vecsize.y);
     }
 
-    const newvecsize = await getVecSize()
-    setXshift(newvecsize.x);
-    setYshift(newvecsize.y);
+    setXshift(vecsize.x);
+    setYshift(vecsize.y);
 
     if (run < 1) {
       setRun(run+1)

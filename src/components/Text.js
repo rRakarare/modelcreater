@@ -48,7 +48,7 @@ function Text({ text, boxHeight, boxWidth, boxDepth, color }) {
   const textOptions = {
     font,
     size: size,
-    height: 0.01,
+    height: 0.001,
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form, Col, Row, Image, Button } from "react-bootstrap";
+import { Container, Form, Col, Row, Image, Button, Alert } from "react-bootstrap";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import logoClearbit from "../api/logoClearbit";
@@ -18,6 +18,8 @@ function AddAnalyzerScreen() {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const [depth, setDepth] = useState(0);
+  const [show, setShow] = useState(false)
+  const [display, setDisplay] = useState('')
 
   const [unit, setUnit] =useState('cm')
 
@@ -44,12 +46,17 @@ function AddAnalyzerScreen() {
           depth: depth,
         }
       );
-      history.push("/");
+      setDisplay(name)
+      setShow(true)
     } catch (err) {
       console.log(err.response.data);
       return err.response;
     }
   };
+
+  const asdqwe = (id) => {
+    console.log(id)
+  }
 
   useEffect(() => {
     if (term) {
@@ -160,6 +167,16 @@ function AddAnalyzerScreen() {
           Add
         </Button>
       </Form>
+      <Alert className="mt-2" show={show} variant="success">
+        
+
+        <div className="d-flex">
+        <p className="justify-self-start py-1 m-0">{display} Added!</p>
+          <Button className="ml-auto" size="sm" onClick={() => setShow(false)} variant="outline-success">
+            Close
+          </Button>
+        </div>
+      </Alert>
     </Container>
   );
 }

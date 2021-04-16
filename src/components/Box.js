@@ -43,7 +43,7 @@ function Box({ dims, color, img }) {
   return (
     <group>
       <mesh position={[0, 0, dims[2]/2]}>
-      <boxBufferGeometry attach="geometry" args={[textWidth,textHeight,0.0001]} />
+      <boxBufferGeometry attach="geometry" args={[textWidth,textHeight,0.001]} />
       <meshStandardMaterial attachArray="material" color={color}  />
       <meshStandardMaterial attachArray="material" color={color}  />
       <meshStandardMaterial attachArray="material" color={color}  />

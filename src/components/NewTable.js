@@ -5,6 +5,7 @@ import {
   GridToolbarExport,
 } from "@material-ui/data-grid";
 import { Button, Image } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import _ from 'lodash'
@@ -53,38 +54,43 @@ function NewTable() {
       width: 150,
     },
     {
+      field: "code",
+      headerName: "Analyzer-Code",
+      width: 150,
+    },
+    {
       field: "width",
       headerName: "width [cm]",
-      width: 150,
+      width: 120,
       valueFormatter: (params) => (params.value * 100).toFixed(2),
       type: "number",
     },
     {
       field: "depth",
       headerName: "depth [cm]",
-      width: 150,
+      width: 120,
       valueFormatter: (params) => (params.value * 100).toFixed(2),
       type: "number",
     },
     {
       field: "height",
       headerName: "height [cm]",
-      width: 150,
+      width: 120,
       valueFormatter: (params) => (params.value * 100).toFixed(2),
       type: "number",
     },
     {
       field: "id",
       headerName: "Actions",
-      width: 200,
+      width: 190,
       renderCell: (params) => (
         <>
-          <Link to={`/build/${params.value}`}>
-            <Button size="sm">Build Model</Button>
-          </Link>
+          <LinkContainer to={`/build/${params.value}`}>
+            <Button size="sm"><i className="fas fa-external-link-alt"></i></Button>
+          </LinkContainer>
 
             <Button onClick={()=>deleteModel(params.value)} className="ml-2" size="sm" variant="danger">
-              Delete
+            <i className="fas fa-trash"></i>
             </Button>
 
         </>

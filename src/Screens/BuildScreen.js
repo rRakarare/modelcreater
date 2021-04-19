@@ -39,6 +39,7 @@ function BuildScreen({ match }) {
     b: "255",
   });
 
+  const [code, setCode] =useState('')
   const [unit, setUnit] =useState('cm')
   const [modelheight, setHeigth] = useState(0)
   const [modelwidth, setWidth] = useState(0)
@@ -78,7 +79,7 @@ function BuildScreen({ match }) {
         {
           brand: data.brand,
           brand_logo: data.brand_logo,
-          code: data.code,
+          code: code,
           name: data.name,
           width: unit == 'cm' ? modelwidth/100 : modelwidth*2.54/100,
           height: unit == 'cm' ? modelheight/100 : modelheight*2.54/100,
@@ -100,6 +101,7 @@ function BuildScreen({ match }) {
         setHeigth(unit == 'cm' ? (response.data.height*100).toFixed(2): (response.data.height*100/2.54).toFixed(2))
         setWidth(unit == 'cm' ? (response.data.width*100).toFixed(2): (response.data.width*100/2.54).toFixed(2))
         setDepth(unit == 'cm' ? (response.data.depth*100).toFixed(2): (response.data.depth*100/2.54).toFixed(2))
+        setCode(response.data.code)
       });
   }, [unit, ignored]);
 
@@ -143,7 +145,7 @@ function BuildScreen({ match }) {
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, -10]} />
                 <Scene />
-                <OrbitControls autoRotate={false} />
+                <OrbitControls autoRotate={true} />
                 <ContactShadows opacity={1}
   width={1}
   height={1}
@@ -162,21 +164,31 @@ function BuildScreen({ match }) {
               </Card.Header>
               <ListGroup variant="flush">
               <ListGroup.Item>
-              <Form.Control onChange={(e)=>setUnit(e.target.value)} as="select">
-            <option>cm</option>
-            <option>in</option>
-          </Form.Control>
+                <Row>
+                  <Col>
+                  <h5 className="d-inline">Code</h5>
+                  <Form.Control onChange={(e)=>setCode(e.target.value)} placeholder="Enter Code" value={code}/>
+                  </Col>
+                  <Col>
+                  <h5 className="d-inline">Unit</h5>
+                  <Form.Control onChange={(e)=>setUnit(e.target.value)} as="select">
+                    <option>cm</option>
+                    <option>in</option>
+                  </Form.Control>
+                  </Col>
+                </Row>
+              
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <h5 className="d-inline">Breite [{unit}]</h5>{" "}
+                  <h5 className="d-inline">Breite [{unit}]</h5>
                   <Form.Control onChange={(e)=>setWidth(e.target.value)} type="number" placeholder="Enter width" value={modelwidth}/>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <h5 className="d-inline">Tiefe [{unit}]</h5>{" "}
+                  <h5 className="d-inline">Tiefe [{unit}]</h5>
                   <Form.Control onChange={(e)=>setDepth(e.target.value)} type="number" placeholder="Enter depth" value={modeldepth}/>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <h5 className="d-inline">Höhe [{unit}]</h5>{" "}
+                  <h5 className="d-inline">Höhe [{unit}]</h5>
                   <Form.Control onChange={(e)=>setHeigth(e.target.value)} type="number" placeholder="Enter height" value={modelheight}/>
                 </ListGroup.Item>
 

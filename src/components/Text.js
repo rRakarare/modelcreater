@@ -2,10 +2,10 @@ import React, { Suspense, useRef, useEffect, useState } from "react";
 import JSONfont from "../Roboto_Regular.json";
 import * as THREE from "three";
 
-function Text({ text, boxHeight, boxWidth, boxDepth, color }) {
+function Text({ text, boxHeight, boxWidth, boxDepth, color, turn }) {
   const font = new THREE.FontLoader().parse(JSONfont);
   const textmesh = useRef();
-  const [size, setSize] = useState(1);
+  const [size, setSize] = useState(0.1);
   const [xshift, setXshift] = useState(0);
   const [yshift, setYshift] = useState(0);
   const [fontstatus, setFontstatus] = useState(false);
@@ -29,8 +29,31 @@ function Text({ text, boxHeight, boxWidth, boxDepth, color }) {
       setSize((boxDepth * (8 / 10) * size) / vecsize.y);
     }
 
-    setXshift(vecsize.x);
-    setYshift(vecsize.y);
+    setXshift(vecsize.x/2);
+    setYshift(vecsize.y/2);
+
+    if (run < 1) {
+      setRun(run+1)
+    } else {
+      setFontstatus(true);
+    }
+
+  }
+
+  const setTextSizeTurned = async () => {
+    const vecsize = await getVecSize()
+
+    if (vecsize.x/vecsize.y > boxDepth/boxWidth) {
+      setSize((boxDepth * (9 / 10) * size) / vecsize.x)
+    } else {
+      setSize((boxWidth * (9 / 10) * size) / vecsize.y)
+    }
+
+    
+    
+
+    setXshift(-vecsize.y/3);
+    setYshift(vecsize.x/2);
 
     if (run < 1) {
       setRun(run+1)
@@ -41,7 +64,13 @@ function Text({ text, boxHeight, boxWidth, boxDepth, color }) {
   }
 
   useEffect(() => {
-    setTextSize()   
+    console.log('asd')
+    if (!turn) {
+      setTextSize()   
+    } else {
+      setTextSizeTurned()
+    }
+    
     
   }, [run]);
 
@@ -53,9 +82,9 @@ function Text({ text, boxHeight, boxWidth, boxDepth, color }) {
 
   return (
     <mesh
-      rotation={[-Math.PI / 2, 0, 0]}
+      rotation={[-Math.PI / 2, 0, turn ? Math.PI/2 : 0]}
       ref={textmesh}
-      position={[-xshift / 2, boxHeight / 2, yshift / 2]}
+      position={[-xshift, boxHeight, yshift]}
     >
       <textGeometry attach="geometry" args={[text, textOptions]} />
       <meshPhongMaterial

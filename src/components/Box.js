@@ -5,6 +5,7 @@ import { groupBy } from "lodash";
 
 function Box({ dims, color, img }) {
 
+  
   const texture = useLoader(THREE.TextureLoader, img)
 
   const width = dims[0]
@@ -42,7 +43,7 @@ function Box({ dims, color, img }) {
 
   return (
     <group>
-      <mesh position={[0, 0, dims[2]/2]}>
+      <mesh position={[0, height/2, dims[2]/2]}>
       <boxBufferGeometry attach="geometry" args={[textWidth,textHeight,0.001]} />
       <meshStandardMaterial attachArray="material" color={color}  />
       <meshStandardMaterial attachArray="material" color={color}  />
@@ -51,7 +52,7 @@ function Box({ dims, color, img }) {
       <meshStandardMaterial attachArray="material" attach="material" map={texture} toneMapped={false}/>
       <meshStandardMaterial attachArray="material" color={color}  />
     </mesh>
-      <mesh position={[0, 0, 0]}>
+      <mesh position={[0, height/2, 0]}>
       <boxBufferGeometry attach="geometry" args={dims} />
       <meshStandardMaterial attach="material" color={color}  />
     </mesh>

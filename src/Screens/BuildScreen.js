@@ -45,6 +45,8 @@ function BuildScreen({ match }) {
   const [modelwidth, setWidth] = useState(0)
   const [modeldepth, setDepth] = useState(0)
 
+  const [turn, setTurned] = useState(false)
+
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   const model = useRef();
@@ -126,6 +128,7 @@ function BuildScreen({ match }) {
             boxWidth={data.width}
             boxDepth={data.depth}
             color={textcoloritem}
+            turn={turn}
           />
         </Suspense>
       </group>
@@ -194,12 +197,18 @@ function BuildScreen({ match }) {
 
 
                 <ListGroup.Item className="text-center">
+                <Button
+                    size="sm"
+                    className="mr-2"
+                    onClick={() => setTurned(!turn)}
+                  >Turn</Button>
                   <Button
                     className="mr-2"
                     size="sm"
                     onClick={() => handleClicktext()}
                   >
                     Text color
+                    
                   </Button>
                   {textcolorOpen ? (
                     <div style={{ position: "absolute", zIndex: "2" }}>

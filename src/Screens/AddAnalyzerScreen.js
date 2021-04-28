@@ -39,7 +39,7 @@ function AddAnalyzerScreen() {
         {
           brand: company,
           name: name,
-          brand_logo: brand.logo,
+          brand_logo: brand.logo ? brand.logo: "http://localhost:3000/logo.png",
           code: code,
           width: width,
           height: height,
